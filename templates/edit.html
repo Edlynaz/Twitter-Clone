@@ -1,0 +1,35 @@
+{% extends "base.html"%} {% block content %} {% load static %}
+<section class="content">
+    <div class="header-main">
+        <img src="{% static 'img/twitter.png' %}" class="logo" />
+        <h1>EDIT</h1>
+    </div>
+    <section class="post_form">
+        <div class="logo" id="user-image">
+          <img src="{% static 'img/user.png' %}" />
+        </div>
+        {% comment %} ######A! {% endcomment %}
+        <form action="/" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input class='input-name' type="text" name="name" placeholder="Your Name" value="{{post.name}}" required>
+          <textarea class='input-name' name="body" placeholder="What's happening?" required>{{post.body}}</textarea>
+          {% comment %} ####A! {% endcomment %}
+          {% if post.image.url %}
+          {% comment %} if there is image link present in the form submitted then display below things {% endcomment %}
+          <img class="post-border" src="{{ post.image.url }}"  /> 
+          {% endif %}
+          <div class="tweet">
+            <input type="file" name="image" />
+  
+            {% comment %} above one is file type input and down one is tweet button {% endcomment %}
+            <a href="/">
+                <button>Cancel</button>
+            </a>
+
+            <button value="tweet">Tweet</button>
+            <!-- <img src="{% static 'img/tweetb.png' %}" > -->
+          </div>
+        </form>
+      </section>
+</section>
+{% endblock %}

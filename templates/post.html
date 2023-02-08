@@ -1,40 +1,80 @@
 {% extends "base.html" %} {% block content %} {% load static %}
-
-
 <section class="content">
+  <div class="header-main">
+    <span><img src="{% static 'img/twitter.png' %}" class="logo" /></span>
+    <h1><b>Twitter</b></h1>
+  </div>
+
     <section class="post_form">
-        <form action="/" method="POST">
+        <div class="logo" id="user-image">
+            <img src="{% static 'img/user.png' %}" />
+        </div>
+
+        {% comment %} ######A! {% endcomment %}
+        <form action="/" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type="text" name="name" placeholder=" Your Name" required>
-            <textarea name="body" placeholder="Tell us anything" required></textarea>
-            <input type="submit" value="Post"/>
+            <input class='input-name' type="text" name="name" placeholder="Your Name" required>
+            <textarea class='input-name' name="body" placeholder="What's happening?" required></textarea>
+     
+            {% comment %} ####A! {% endcomment %}
+            <div class="tweet">
+                <input type="file" name="image" />
 
-
+                {% comment %} above one is file type input and down one is tweet button {% endcomment %}
+                <button value="tweet">Tweet</button>
+                <!-- <img src="{% static 'img/tweetb.png' %}" > -->
+            </div>
         </form>
     </section>
     <section class="posts">
         <ul>
-            {% for post in posts %}
-            <li>
-                <img class="menu_icon js-menu-icon" src="{% static 'img/option.png' %}"/>
-                 <div class="menu">
-                    <a href="/delete/{{ post.id }}/">Delete</a>
+  
+          {% for post in posts %}
+          <li id="postgap">
+            <img class="menu_icon js-menu-icon"  src="{% static 'img/menu.png' %}" />
+            <div class="menu">
+             
+              {% comment %} below one will direct to edit page separate {% endcomment %}
+              <a href="/edit/{{post.id}}/">Edit</a><br><br>
+            
+              {% comment %} above one will redirect to delete page {% endcomment %}
+              <a href="/delete/{{post.id}}/">Delete</a>
+            </div>
+            <div class="logo" id="user-image">
+              <img src="{% static 'img/user.png' %}" />
+            </div>
+            <div class="postbody">
+              <div class="name">{{post.name}}</div>
+              <div class="datetime">{{post.created_at}}</div>
+              
+              {% comment %} ###############A!########################## {% endcomment %}
+              {% if post.image.url %}
+              {% comment %} if there is image link present in the form submitted then display below things {% endcomment %}
+              <img class="post-border" src="{{ post.image.url}}"  /> 
+              {% endif %}
+              <div class="bodytext">
+                <p>{{post.body}}</p>
+              </div>
+                
+                {% csrf_token %}
+                <div class="row">
+                  <a href="like/{{post.id}}/">
+                    <button class="like-button" type="submit" , name="post_id" , value="{{ post.id }}">
+                    <img style="width: 20px; height: 20px;" src="{% static 'img/heart.png' %}" />
+                  </button>
+                  </a>
+                  
+                  <div class="likes-count">{{post.likes}}</div>
                 </div>
-                <div class="logo">
-                    <img src="{% static 'img/user.png' %}"/>
-                </div>
-                <div class="name_body">
-                    <div class="name">{{ post.name }}<br/>
-                    <div class="datetime">{{ post.created_at }}<br/>
-                    <p>{{ post.body }}</p>
-                    <a href="/delete/{{ post.id }}/">delete</a>
-                </div>
-            </li>
-            {% endfor %}
-        </ul> 
-    </section>
-    <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
-    <script src="{% static 'js/posts.js' %}"></script>
+              </form>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+      <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+    <script src = "{% static 'js/posts.js' %}"></script>
+    
 </section>
 {% endblock %}
 
